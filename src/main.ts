@@ -142,7 +142,7 @@ function calculateContrast(hex1: string, hex2: string): number {
 }
 
 // --- UI 更新邏輯 ---
-function updateUI(shouldSave: boolean = true) {
+function updateUI() {
   const fg = fgColorInput.value;
   const bg = bgColorInput.value;
 
