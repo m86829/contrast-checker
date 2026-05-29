@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>顏色對比度檢測工具 (附原生地滴管)</title>
+</head>
+
+<body>
+  <div class="container">
+    <h1>WCAG 顏色對比度檢查</h1>
+
+    <div class="workspace">
+
+      <div class="top-row">
+
+        <div class="panel control-panel">
+          <div class="toolbar">
+            <button id="undo-btn" class="toolbar-btn" disabled title="復原上一步 (Ctrl+Z)">↩️ 復原 (Undo)</button>
+            <button id="redo-btn" class="toolbar-btn" disabled title="取消復原 (Ctrl+Y)" style="margin-left: 8px;">↪️ 重做
+              (Redo)</button>
+          </div>
+
+          <div class="color-group">
+            <label for="fg-color">文字顏色 (Foreground)</label>
+            <div class="input-row">
+              <input type="color" id="fg-color" value="#000000">
+              <input type="text" id="fg-text" value="#000000" maxlength="7">
+              <button id="fg-dropper" class="dropper-btn" title="開啟滴管選色">🧪 滴管</button>
+            </div>
+          </div>
+
+          <div class="color-group">
+            <label for="bg-color">背景顏色 (Background)</label>
+            <div class="input-row">
+              <input type="color" id="bg-color" value="#FFFFFF">
+              <input type="text" id="bg-text" value="#FFFFFF" maxlength="7">
+              <button id="bg-dropper" class="dropper-btn" title="開啟滴管選色">🧪 滴管</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel score-panel">
+          <div class="score-header">
+            <h2>對比度分數：<span id="contrast-ratio">21.00 : 1</span></h2>
+          </div>
+
+          <div class="contrast-progress-container">
+            <div id="contrast-progress-bar" class="contrast-progress-bar"></div>
+          </div>
+
+          <div class="badge-group">
+            <div class="badge" id="wcag-aa-normal">AA 一般文字: <span>通過</span></div>
+            <div class="badge" id="wcag-aa-large">AA 大文字: <span>通過</span></div>
+            <div class="badge" id="wcag-aaa-normal">AAA 一般文字: <span>通過</span></div>
+            <div class="badge" id="wcag-aaa-large">AAA 大文字: <span>通過</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-area" id="preview-box">
+        <p class="preview-text-large">【大文字條件 A】大文字預覽 (18pt / 24px 以上任何常規文字)</p>
+        <p class="preview-text-medium-bold">【大文字條件 B】大文字預覽 (14pt / 19px 以上加粗 Bold 文字)</p>
+        <p class="preview-text-normal">【一般小文字】小文字預覽 (網頁內文預設 12pt / 16px 常規文字)</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

@@ -1,0 +1,239 @@
+:root {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* 主工作區垂直排列 */
+.workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* 頂部列：左控制、右分數並排 */
+.top-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+/* 行動裝置自動轉為單欄 */
+@media (max-width: 768px) {
+  .top-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 面板基礎樣式 */
+.panel {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 左側控制面板樣式 */
+.control-panel {
+  justify-content: flex-start;
+}
+
+/* 修正工具列在左面板頂部 */
+.control-panel .toolbar {
+  margin-top: -10px;
+  margin-bottom: 15px;
+}
+
+/* 右側分數面板樣式 */
+.score-panel {
+  justify-content: flex-start;
+}
+
+.score-header h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+/* 顏色群組區塊間距 */
+.color-group {
+  margin-bottom: 20px;
+}
+
+.color-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+/* 控制項排列 */
+.input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* 原生色彩選擇器樣式 */
+input[type="color"] {
+  border: none;
+  width: 50px;
+  height: 40px;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* 文字輸入框樣式 */
+input[type="text"] {
+  flex: 1;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 16px;
+}
+
+/* 滴管按鈕樣式 */
+.dropper-btn {
+  height: 38px;
+  padding: 0 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropper-btn:hover {
+  background-color: #0056b3;
+}
+
+/* 燈號群組排版 */
+.badge-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* 燈號基礎樣式 */
+.badge {
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #ffebe9;
+  color: #ce3c2e;
+}
+
+/* 燈號通過樣式 */
+.badge.pass {
+  background-color: #e6f6ec;
+  color: #1e7e34;
+}
+
+/* 工具列樣式 */
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* 復原按鈕樣式 */
+.toolbar-btn {
+  height: 32px;
+  padding: 0 12px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.toolbar-btn:hover:not(:disabled) {
+  background-color: #5a6268;
+}
+
+.toolbar-btn:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+/* 進度條外框（淺灰色長方形） */
+.contrast-progress-container {
+  width: 100%;
+  height: 20px;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 15px 0 25px 0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 進度條內部填滿區域 */
+.contrast-progress-bar {
+  height: 100%;
+  width: 100%;
+  background-color: #4caf50;
+  border-radius: 10px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* 下方預覽區域：強制滿寬並設定最小高度 */
+.preview-area {
+  width: 100%;
+  min-height: 180px;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* 【大文字條件 A】設定：大於 24px (18pt) 常規字體 */
+.preview-text-large {
+  font-size: 24px;
+  font-weight: normal;
+  /* 超過 24px 不需粗體也是大文字 */
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+/* 【大文字條件 B】設定：19px (14pt) 以上且必須加粗 */
+.preview-text-medium-bold {
+  font-size: 19px;
+  font-weight: bold;
+  /* 必須加粗才符合大文字 */
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+/* 【一般小文字】設定：16px (12pt) 內文字體 */
+.preview-text-normal {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
