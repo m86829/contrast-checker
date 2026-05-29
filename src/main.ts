@@ -15,7 +15,7 @@ const progressBar = document.getElementById('contrast-progress-bar') as HTMLDivE
 
 // 復原與重做按鈕
 const undoBtn = document.getElementById('undo-btn') as HTMLButtonElement;
-const redoBtn = document.getElementById('redo-btn') as HTMLButtonElement; // 新增
+const redoBtn = document.getElementById('redo-btn') as HTMLButtonElement;
 
 const badges = {
   aaNormal: document.getElementById('wcag-aa-normal') as HTMLDivElement,
@@ -31,7 +31,7 @@ interface ColorState {
 }
 
 let historyStack: ColorState[] = [];
-let redoStack: ColorState[] = []; // 新增：存放被復原的狀態
+let redoStack: ColorState[] = [];
 
 // 儲存當前狀態到歷史紀錄中
 function saveStateToHistory() {
@@ -53,10 +53,7 @@ function saveStateToHistory() {
     historyStack.shift();
   }
 
-  // 💡 關鍵：只要使用者手動改變了顏色，就把之前的 Redo 紀錄清空，因為歷史軸前進了
   redoStack = [];
-
-  // 更新按鈕狀態
   updateToolbarButtons();
 }
 
@@ -64,55 +61,51 @@ function saveStateToHistory() {
 function handleUndo() {
   if (historyStack.length === 0) return;
 
-  // 備份當前畫面上的狀態到 Redo 堆疊
   const currentState: ColorState = {
     fg: fgColorInput.value,
     bg: bgColorInput.value
   };
   redoStack.push(currentState);
 
-  // 彈出最後一筆舊紀錄
   const previousState = historyStack.pop();
 
   if (previousState) {
     fgColorInput.value = previousState.fg;
     bgColorInput.value = previousState.bg;
-    updateUI(false);
+    updateUI(); // 修正：移除參數
   }
 
   updateToolbarButtons();
 }
 
-// 執行重做 (Redo) - 新增
+// 執行重做 (Redo)
 function handleRedo() {
   if (redoStack.length === 0) return;
 
-  // 將當前狀態丟回 Undo 堆疊，以便等一下還可以再 Undo
   const currentState: ColorState = {
     fg: fgColorInput.value,
     bg: bgColorInput.value
   };
   historyStack.push(currentState);
 
-  // 從 Redo 堆疊拿回被取消復原的狀態
   const nextState = redoStack.pop();
 
   if (nextState) {
     fgColorInput.value = nextState.fg;
     bgColorInput.value = nextState.bg;
-    updateUI(false);
+    updateUI(); // 修正：移除參數
   }
 
   updateToolbarButtons();
 }
 
-// 更新工具列按鈕的可點擊狀態 - 新增
+// 更新工具列按鈕的可點擊狀態
 function updateToolbarButtons() {
   undoBtn.disabled = historyStack.length === 0;
   redoBtn.disabled = redoStack.length === 0;
 }
 
-// --- 數學公式計算區 (保持不變) ---
+// --- 數學公式計算區 ---
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
@@ -160,8 +153,8 @@ function updateUI() {
 
   if (ratio < 3.0) progressBar.style.backgroundColor = '#dc3545';
   else if (ratio < 4.5) progressBar.style.backgroundColor = '#ffc107';
-  else if (ratio < 7.0) progressBar.style.backgroundColor = '#28a745';
-  else progressBar.style.backgroundColor = '#155724';
+  else if (ratio < 7.0) progressBar.style.backgroundColor = '#155724';
+  else progressBar.style.backgroundColor = '#28a745';
 
   updateBadge(badges.aaNormal, ratio >= 4.5);
   updateBadge(badges.aaLarge, ratio >= 3.0);
@@ -195,7 +188,7 @@ function setupDropper(button: HTMLButtonElement, colorInput: HTMLInputElement) {
       saveStateToHistory();
       const result = await eyeDropper.open();
       colorInput.value = result.sRGBHex;
-      updateUI(false);
+      updateUI(); // 修正：移除參數
     } catch (error) {
       console.log('使用者取消選色或發生錯誤:', error);
     }
@@ -209,27 +202,27 @@ setupDropper(bgDropperBtn, bgColorInput);
 fgColorInput.addEventListener('pointerdown', saveStateToHistory);
 bgColorInput.addEventListener('pointerdown', saveStateToHistory);
 
-fgColorInput.addEventListener('input', () => updateUI(false));
-bgColorInput.addEventListener('input', () => updateUI(false));
+fgColorInput.addEventListener('input', () => updateUI()); // 修正：移除參數
+bgColorInput.addEventListener('input', () => updateUI()); // 修正：移除參數
 
 fgTextInput.addEventListener('change', () => {
   if (/^#[0-9A-F]{6}$/i.test(fgTextInput.value)) {
     saveStateToHistory();
     fgColorInput.value = fgTextInput.value;
-    updateUI(false);
+    updateUI(); // 修正：移除參數
   }
 });
 bgTextInput.addEventListener('change', () => {
   if (/^#[0-9A-F]{6}$/i.test(bgTextInput.value)) {
     saveStateToHistory();
     bgColorInput.value = bgTextInput.value;
-    updateUI(false);
+    updateUI(); // 修正：移除參數
   }
 });
 
 // 綁定 Undo 與 Redo 點擊事件
 undoBtn.addEventListener('click', handleUndo);
-redoBtn.addEventListener('click', handleRedo); // 新增
+redoBtn.addEventListener('click', handleRedo);
 
 // 鍵盤快捷鍵監聽
 window.addEventListener('keydown', (event) => {
@@ -237,12 +230,10 @@ window.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
 
   if (isCtrlOrCmd) {
-    // Ctrl + Z = 復原
     if (key === 'z' && !event.shiftKey) {
       event.preventDefault();
       handleUndo();
     }
-    // Ctrl + Y 或 Ctrl + Shift + Z = 取消復原 (Redo)
     if (key === 'y' || (key === 'z' && event.shiftKey)) {
       event.preventDefault();
       handleRedo();
@@ -251,4 +242,4 @@ window.addEventListener('keydown', (event) => {
 });
 
 // 初始化第一次畫面
-updateUI(false);
+updateUI(); // 修正：移除參數
